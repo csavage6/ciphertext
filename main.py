@@ -79,9 +79,6 @@ def menu():
     choice = "0"
 
     while choice != "q":
-        inputText = ""
-        outputText = ""
-
         print("What would you like to do?")
         print("1. Cipher")
         print("2. Decipher")
