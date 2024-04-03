@@ -9,7 +9,9 @@ numberCharacters = ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", 
 
 
 def convertToNumber(inputChar):
-    return numberCharacters[letterCharacters.index(inputChar)]
+    if inputChar in letterCharacters:
+        return numberCharacters[letterCharacters.index(inputChar)]
+    return numberCharacters[letterCharacters.index("¤")]
 
 
 def convertToLetter(inputChar):
@@ -17,26 +19,20 @@ def convertToLetter(inputChar):
 
 
 def cipherText(inputText):
-    numberText = ""
-    numberText += str(randint(0, 9))
+    numberText = str(randint(0, 9))
 
     for i in range(len(inputText)):
-        if inputText[i] in letterCharacters:
-            numberText += convertToNumber(inputText[i])
-        else:
-            numberText += convertToNumber("¤")
+        numberText += convertToNumber(inputText[i])
 
         if (i + 1) % 2 == 0:
-            numberText += str(randint(0, 9))
-            numberText += str(randint(0, 9))
+            numberText += str(randint(0, 9)) + str(randint(0,9))
 
     numberText += str(randint(0, 9))
 
     outputText = ""
 
     for i in range(0,len(numberText),2):
-        twoDigitChar = str(numberText[i]) + str(numberText[i+1])
-        outputText += convertToLetter(twoDigitChar)
+        outputText += convertToLetter(str(numberText[i:i+2]))
 
     return outputText
 
@@ -49,20 +45,12 @@ def decipherText(inputText):
 
     stripOuterText = numberText[1:-1]
     outputText = ""
-    index = 0
-    count = 1
 
-    while index < len(stripOuterText):
-        if count % 3 == 0:
-            index += 2
-            count += 1
+    for i in range(1, len(stripOuterText)+1, 2):
+        if i % 6 == 5:
             continue
 
-        twoDigitChar = stripOuterText[index] + stripOuterText[index + 1]
-        outputText += convertToLetter(twoDigitChar)
-
-        index += 2
-        count += 1
+        outputText += convertToLetter(stripOuterText[i-1:i+1])
 
     return outputText
 
@@ -78,15 +66,13 @@ def menu():
         choice = str(input())
 
         if choice == "1":
-            inputText = input("What would you like to cipher?\n")
-            outputText = cipherText(inputText)
+            outputText = cipherText(input("What would you like to cipher?\n"))
             print()
             print(f"Ciphered Text:\t{outputText}")
             print()
 
         elif choice == "2":
-            inputText = input("What would you like to decipher?\n")
-            outputText = decipherText(inputText)
+            outputText = decipherText(input("What would you like to decipher?\n"))
             print()
             print(f"Deciphered Text:\t{outputText}")
             print()
